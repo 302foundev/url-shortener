@@ -11,6 +11,7 @@ export const createUser = async (first_name: string, last_name: string, email: s
       password: hashedPassword,
     },
   });
+
   return user;
 };
 
@@ -40,4 +41,5 @@ export const deleteUserById = async (id: number): Promise<User> => {
   });
   return user;
 };
+
 

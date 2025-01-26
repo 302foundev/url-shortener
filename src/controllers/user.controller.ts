@@ -82,3 +82,5 @@ export const deleteUser = async (req: Request, res: Response) => {
 export const logout = (req: Request, res: Response) => {
   res.json({ message: 'Logged out successfully' })
 }
+
+
