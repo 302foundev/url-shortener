@@ -48,7 +48,7 @@ export const login = async (req: Request, res: Response) => {
 
 // Get user data
 export const getUserData = async (req: Request, res: Response) => {
-  const userId = req.userId
+  const userId = req.userId.sub
 
   try {
     const user = await findUserById(userId)
