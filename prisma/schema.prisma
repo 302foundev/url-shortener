@@ -19,7 +19,7 @@ model User {
 
 model Url {
   id          Int      @id @default(autoincrement())
-  url         String
+  originalUrl String
   slug        String   @unique
   description String   @default("")
   userId      Int
