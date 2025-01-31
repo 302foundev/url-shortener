@@ -37,7 +37,7 @@ export const login = async (req: Request, res: Response) => {
       return res.status(401).json({ error: 'Invalid credentials' })
     }
 
-    const token = jwt.sign({ userId: user.id }, jwtSecret, { expiresIn: '1h' })
+    const token = jwt.sign({ id: user.id }, jwtSecret, { expiresIn: '1h' })
     res.json({ message: 'Login successful', token })
   }
 
@@ -48,7 +48,7 @@ export const login = async (req: Request, res: Response) => {
 
 // Get user data
 export const getUserData = async (req: Request, res: Response) => {
-  const userId = req.userId.sub
+  const userId = req.user?.id
 
   try {
     const user = await findUserById(userId)
@@ -66,7 +66,7 @@ export const getUserData = async (req: Request, res: Response) => {
 
 // Deleting user
 export const deleteUser = async (req: Request, res: Response) => {
-  const userId = req.userId
+  const userId = req.user?.id
 
   try {
     await deleteUserById(userId)

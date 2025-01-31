@@ -1,22 +1,28 @@
-import { Request, Response, NextFunction } from 'express';
-import { verifyToken } from '../services/auth.service';
+import { Request, Response, NextFunction } from "express";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.cookies?.token;
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ error: "Unauthorized" });
 
-  if (!token) {
-    return res.status(403).json({ error: 'Token required' });
+  const jwtSecret = process.env.JWT_SECRET!;
+  if (!jwtSecret) {
+    throw new Error("JWT_SECRET is not defined in environment variables");
   }
 
   try {
-    const decoded = verifyToken(token);
-    req.user = decoded;
-    next();
+    const decoded = jwt.verify(token, process.env.jwtSecret!) as JwtPayload;
+
+    if (typeof decoded === "object" && "id" in decoded) {
+      req.user = { id: decoded.id as string }
+      return next()
+    }
+
+    res.status(401).json({ error: "Invalid token" })
   }
 
   catch {
-    return res.status(401).json({ error: 'Invalid token' });
+    res.status(401).json({ error: "Invalid token" });
   }
-
 };
 
